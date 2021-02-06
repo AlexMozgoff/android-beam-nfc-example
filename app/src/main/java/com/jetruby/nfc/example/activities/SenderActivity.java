@@ -1,4 +1,4 @@
-package com.jetruby.nfc.example;
+package com.jetruby.nfc.example.activities;
 
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -8,7 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.jetruby.nfc.example.R;
+import com.jetruby.nfc.example.cryptography.DiffieHellman;
 import com.jetruby.nfc.example.nfc.OutcomingNfcManager;
 
 
@@ -20,6 +21,8 @@ public class SenderActivity extends AppCompatActivity implements OutcomingNfcMan
 
     private NfcAdapter nfcAdapter;
     private OutcomingNfcManager outcomingNfccallback;
+    private String data;
+    private String encryptedData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +39,14 @@ public class SenderActivity extends AppCompatActivity implements OutcomingNfcMan
 
         initViews();
 
+        //data = this.tvOutcomingMessage.getText().toString();
+
+
         // encapsulate sending logic in a separate class
         this.outcomingNfccallback = new OutcomingNfcManager(this);
         this.nfcAdapter.setOnNdefPushCompleteCallback(outcomingNfccallback, this);
         this.nfcAdapter.setNdefPushMessageCallback(outcomingNfccallback, this);
+
     }
 
     private void initViews() {
@@ -60,13 +67,30 @@ public class SenderActivity extends AppCompatActivity implements OutcomingNfcMan
     }
 
     private void setOutGoingMessage() {
-        String outMessage = this.etOutcomingMessage.getText().toString();
-        this.tvOutcomingMessage.setText(outMessage);
+        data = this.etOutcomingMessage.getText().toString();    //Получаем исходящее сообщение из формы
+
+        if (!data.equals("")) {
+            //Keys exchange by Diffie-Hellman algorythm
+
+            DiffieHellman diffieHellman = new DiffieHellman();    //public and private keys generated
+            diffieHellman.getPublicKey();                         //send public key
+                                                                  //receive public key
+                                                                  //send partial key
+                                                                  //receive partial key
+                                                                  //generate full key
+
+            //Chipher sending data
+
+            /*Encryptor encryptor = new Encryptor();
+            encryptedData = encryptor.encryptText(data, diffieHellman.getPrivateKey());*/
+        }
+
+        this.tvOutcomingMessage.setText(data);
     }
 
     @Override
     public String getOutcomingMessage() {
-        return this.tvOutcomingMessage.getText().toString();
+        return encryptedData;
     }
 
     @Override
@@ -77,4 +101,6 @@ public class SenderActivity extends AppCompatActivity implements OutcomingNfcMan
         runOnUiThread(() ->
                 Toast.makeText(SenderActivity.this, R.string.message_beaming_complete, Toast.LENGTH_SHORT).show());
     }
+
+
 }

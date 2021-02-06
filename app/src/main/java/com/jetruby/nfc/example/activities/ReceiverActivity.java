@@ -1,4 +1,4 @@
-package com.jetruby.nfc.example;
+package com.jetruby.nfc.example.activities;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.jetruby.nfc.example.R;
 
 
 public class ReceiverActivity extends AppCompatActivity {
@@ -49,8 +50,6 @@ public class ReceiverActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        // also reading NFC message from here in case this activity is already started in order
-        // not to start another instance of this activity
         receiveMessageFromDevice(intent);
     }
 
@@ -58,8 +57,6 @@ public class ReceiverActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        // foreground dispatch should be enabled here, as onResume is the guaranteed place where app
-        // is in the foreground
         enableForegroundDispatch(this, this.nfcAdapter);
         receiveMessageFromDevice(getIntent());
     }
@@ -100,15 +97,9 @@ public class ReceiverActivity extends AppCompatActivity {
 
     public void enableForegroundDispatch(AppCompatActivity activity, NfcAdapter adapter) {
 
-        // here we are setting up receiving activity for a foreground dispatch
-        // thus if activity is already started it will take precedence over any other activity or app
-        // with the same intent filters
-
-
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        //
         final PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
 
         IntentFilter[] filters = new IntentFilter[1];
