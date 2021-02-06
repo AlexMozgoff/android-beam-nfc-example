@@ -1,4 +1,4 @@
-package com.jetruby.nfc.example.activities;
+package com.jetruby.nfc.example.activities.text;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -17,10 +17,9 @@ import com.jetruby.nfc.example.R;
 
 public class ReceiverActivity extends AppCompatActivity {
 
-    public static final String MIME_TEXT_PLAIN = "text/plain";
-
     private TextView tvIncomingMessage;
     private NfcAdapter nfcAdapter;
+    private int counter = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +108,7 @@ public class ReceiverActivity extends AppCompatActivity {
         filters[0].addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
         filters[0].addCategory(Intent.CATEGORY_DEFAULT);
         try {
-            filters[0].addDataType(MIME_TEXT_PLAIN);
+            filters[0].addDataType("text/plain");
         } catch (IntentFilter.MalformedMimeTypeException ex) {
             throw new RuntimeException("Check your MIME type");
         }

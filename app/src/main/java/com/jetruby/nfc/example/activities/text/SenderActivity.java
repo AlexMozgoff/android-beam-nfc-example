@@ -1,4 +1,4 @@
-package com.jetruby.nfc.example.activities;
+package com.jetruby.nfc.example.activities.text;
 
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -67,7 +67,7 @@ public class SenderActivity extends AppCompatActivity implements OutcomingNfcMan
     }
 
     private void setOutGoingMessage() {
-        data = this.etOutcomingMessage.getText().toString();    //Получаем исходящее сообщение из формы
+        data = this.etOutcomingMessage.getText().toString();      //Получаем исходящее сообщение из формы
 
         if (!data.equals("")) {
             //Keys exchange by Diffie-Hellman algorythm

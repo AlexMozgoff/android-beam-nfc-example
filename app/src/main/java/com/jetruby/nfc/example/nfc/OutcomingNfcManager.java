@@ -10,6 +10,7 @@ public class OutcomingNfcManager implements NfcAdapter.CreateNdefMessageCallback
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
     private NfcActivity activity;
+    public static int counter;
 
     public OutcomingNfcManager(NfcActivity activity) {
         this.activity = activity;
@@ -22,7 +23,6 @@ public class OutcomingNfcManager implements NfcAdapter.CreateNdefMessageCallback
         String outString = activity.getOutcomingMessage();
         byte[] outBytes = outString.getBytes();
         NdefRecord outRecord = NdefRecord.createMime(MIME_TEXT_PLAIN, outBytes);
-
         return new NdefMessage(outRecord);
     }
 

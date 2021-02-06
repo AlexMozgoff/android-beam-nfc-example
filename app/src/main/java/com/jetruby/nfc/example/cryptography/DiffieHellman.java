@@ -1,15 +1,15 @@
 package com.jetruby.nfc.example.cryptography;
 
 import java.math.BigInteger;
-import java.security.*;
 import java.util.Random;
 
 public class DiffieHellman {
 
     /*private KeyPairGenerator keyPairGenerator;
     private static KeyPair selfPair;*/
-    private BigInteger privateKey;
-    private BigInteger publicKey;
+
+    private static BigInteger privateKey, publicKey, partialKey, fullKey;
+    private static BigInteger receivedPublicKey, receivedPartialKey;
 
     public DiffieHellman() {
         Random random = new Random();
@@ -21,21 +21,32 @@ public class DiffieHellman {
         selfPair = keyPairGenerator.generateKeyPair();*/
     }
 
-    public BigInteger generatePartialKey(BigInteger receivedPublicKey) {
-        BigInteger partialKey = publicKey.modPow(privateKey, receivedPublicKey);
+    public BigInteger generatePartialKey() {
+        partialKey = publicKey.modPow(privateKey, receivedPublicKey);
         return partialKey;
     }
 
-    public BigInteger generateFullKey(BigInteger receivedPublicKey, BigInteger partialKey) {
-        BigInteger fullKey = partialKey.modPow(privateKey, receivedPublicKey);
-        return fullKey;
-    }
-
-    public BigInteger getPrivateKey() {
-        return privateKey;
+    public void generateFullKey() {
+        fullKey = receivedPartialKey.modPow(privateKey, receivedPublicKey);
     }
 
     public BigInteger getPublicKey() {
         return publicKey;
+    }
+
+    public BigInteger getFullKey() {
+        return fullKey;
+    }
+
+    public void setReceivedPublicKey(BigInteger receivedPublicKey) {
+        if (!receivedPublicKey.equals(null) && !receivedPublicKey.equals("")) {
+            this.receivedPublicKey = receivedPublicKey;
+        }
+    }
+
+    public void setReceivedPartialKey(BigInteger receivedPartialKey) {
+        if (!receivedPartialKey.equals(null) && !receivedPartialKey.equals("")) {
+            this.receivedPartialKey = receivedPartialKey;
+        }
     }
 }
